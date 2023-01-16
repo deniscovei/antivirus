@@ -129,7 +129,7 @@ bool malicious_substrings(char *url)
 {
 	static const char *const substrings[] = { "e=com", "cmd.login", "/exe",
 											 "/bin", "signin", "admin",
-											 "http://"};
+											 "https/"};
 	int substrings_count = sizeof(substrings) / sizeof(char *);
 
 	for (int i = 0; i < substrings_count; i++) {
@@ -415,14 +415,15 @@ bool is_benign_task2(char *line, char **fields)
 		// verificare prezenta ip safe
 		if (!strcmp(fields[count], "response_ip")) {
 			if (!strcmp(field, "255.255.255.255") ||
-				!strcmp(field, "ff02::16"))
+				!strcmp(field, "ff02::16") ||
+				!strcmp(field, "239.255.255.250"))
 				safe = 1;
 		}
 
 		/* bruteforce - valoare mare pentru flow_pkts_payload.avg si
 						valoare mare pentru flow_duration*/
 		if (!strcmp(fields[count], "flow_pkts_payload.avg")) {
-			if (duration_exceded && strtod(field, &eptr) > 580.0)
+			if (duration_exceded && strtod(field, &eptr) > 577.0)
 				benign = 0;
 		}
 
