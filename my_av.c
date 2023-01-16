@@ -150,7 +150,10 @@ bool malware_extension(char *url)
 {
 	static const char *const extensions[] = { ".exe", ".bin", ".jpg", ".png",
 											 ".dat", ".doc", ".css", ".sh",
-											 ".com", ".pdf", "jpeg", ".bat"};
+											 ".com", ".pdf", "jpeg", ".bat",
+											 ".dz", ".run", ".pif", ".wsh",
+											 ".ipa", ".osx", ".download",
+											 ".spc", ".mpsl", ".x86" };
 	int extensions_count = sizeof(extensions) / sizeof(char *);
 	char *extension = strrchr(url, '.');
 
@@ -162,8 +165,7 @@ bool malware_extension(char *url)
 	return 0;
 }
 
-bool is_in_database(char *domain, int bad_urls_count,
-					char **bad_urls)
+bool is_in_database(char *domain, int bad_urls_count, char **bad_urls)
 {
 	for (int i = 0; i < bad_urls_count; i++) {
 		if (!strcmp(domain, bad_urls[i]))
@@ -206,7 +208,7 @@ bool too_many_hyphens(char *domain)
 			hyphen_count++;
 	}
 
-	return hyphen_count >= 2;
+	return hyphen_count >= 3;
 }
 
 bool malicious_TLD(char *domain)
@@ -244,16 +246,22 @@ bool too_many_dots(char *domain)
 
 bool similar_domains(char *domain)
 {
-	static const char *const trusted_domains[] = { "facebook.com",
-						"twitter.com", "chat.whatsapp.com", "baidu.com",
-						"en.wikipedia.org", "google.com", "web.whatsapp.com" };
-
+	static const char *const trusted_domains[] = { "facebook", "twitter",
+						"whatsapp", "baidu", "instagram", "wikipedia",
+						"google", "paypal" };
 	int trusted_domains_count = sizeof(trusted_domains) / sizeof(char *);
 
-	for (int i = 0; i < trusted_domains_count; i++) {
-		int distance = string_distance(domain, (char *)trusted_domains[i]);
-		if (1 <= distance && distance <= 2)
-			return 1;
+	char copy_domain[BUFF_SIZE];
+	strcpy(copy_domain, domain);
+	char *tok = strtok(copy_domain, ".");
+
+	while (tok) {
+		for (int i = 0; i < trusted_domains_count; i++) {
+			int distance = string_distance(tok, (char *)trusted_domains[i]);
+			if (1 <= distance && distance <= 2)
+				return 1;
+		}
+		tok = strtok(NULL, ".");
 	}
 
 	return 0;
