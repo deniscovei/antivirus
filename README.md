@@ -1,6 +1,8 @@
-# Covei Denis
+# README
 
-    ## Taskul 1
+Name: `Covei Denis`
+
+## Taskul 1
 
     Url-ul este supus urmatoarelor teste:
 
@@ -15,7 +17,7 @@
     test 9 - numar subdomenii
     test 10 - verificare domenii de incredere cu nume similare
 
-    ## Taskul 2
+## Taskul 2
 
     test bruteforce  - valoare mare pentru flow_pkts_payload.avg si
                        valoare mare pentru flow_duration
